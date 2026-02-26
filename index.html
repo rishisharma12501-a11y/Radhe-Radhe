@@ -11,6 +11,110 @@
   <!-- canvas-confetti for boom effect -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
   <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #fff0d7;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gulalCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gulalCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function init() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            // थोड़े शुरुआती कण (optional)
+            for (let i = 0; i < 20; i++) {
+                particles.push(createParticle(true));
+            }
+        }
+
+        function createParticle(explosive = false) {
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const angle = Math.random() * Math.PI * 2;
+            const speed = explosive ? Math.random() * 8 + 4 : Math.random() * 5 + 2;
+            return {
+                x: centerX,
+                y: centerY,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 1.0,
+                color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                size: Math.random() * 8 + 4
+            };
+        }
+
+        function update() {
+            // हर फ्रेम में नए कण जोड़ो (spray effect)
+            for (let i = 0; i < 5; i++) {
+                particles.push(createParticle());
+            }
+
+            // कणों को अपडेट करो
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.05;   // हल्का गुरुत्वाकर्षण (नीचे की ओर)
+                p.life -= 0.005; // धीरे-धीरे फीका
+
+                // अगर कण बहुत पुराना या स्क्रीन से बाहर तो हटाओ
+                if (p.life <= 0 || p.y > height + 50 || p.x < -50 || p.x > width + 50) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // ड्रॉ करो
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                ctx.globalAlpha = p.life;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+
+            requestAnimationFrame(update);
+        }
+
+        window.addEventListener('resize', () => {
+            init();
+        });
+
+        init();
+        update();
+
+        // क्लिक करने पर धमाका (extra boom)
+        canvas.addEventListener('click', (e) => {
+            for (let i = 0; i < 30; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 12 + 6;
+                particles.push({
+                    x: e.clientX,
+                    y: e.clientY,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: 1.0,
+                    color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                    size: Math.random() * 10 + 4
+                });
+            }
+        });
     
     * {
       margin: 0;
@@ -453,6 +557,8 @@ const countdown = setInterval(function () {
     <div class="name-box">
       <input type="text" id="nameInput" placeholder="✨ अपना नाम लिखें ✨">
       <button id="generateBtn"><i class="fas fa-link"></i> लिंक बनाएँ</button>
+      <button onclick="shareWhatsApp()">📲 WhatsApp पर शेयर करें</button>
+
       
       <!-- hidden link container (appears after generate) -->
       <div id="linkContainer" class="link-container hidden">
