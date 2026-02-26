@@ -454,7 +454,7 @@ const countdown = setInterval(function () {
      <input type="text" id="nameInput" placeholder="अपना नाम लिखें">
 
 <button onclick="generateLink()">🎁 अपना होली लिंक बनाएं</button>
-<button onclick="shareWhatsApp()">📲 WhatsApp पर शेयर करें</button>
+<button id="generateBtn"><i class="fas fa-link"></i> लिंक बनाएँ </button>
 <button onclick="copyLink()">🔗 लिंक कॉपी करें</button>
       
       <!-- hidden link container (appears after generate) -->
@@ -472,14 +472,7 @@ const countdown = setInterval(function () {
     'width' : 300,
     'params' : {}
   };
-  <script>
-function shareOnWhatsApp() {
-    const message = "🌸 Happy Holi 2026! 🎉\n\nCheck this beautiful Holi countdown page:\n" + window.location.href;
-    const whatsappURL = "https://wa.me/?text=" + encodeURIComponent(message);
-    window.open(whatsappURL, "_blank");
-}
-    </script>
-       
+
 </script>
 <script src="https://www.highperformanceformat.com/992722dd633b8591e27ebdecdce06bf4/invoke.js"></script>
 </div>
