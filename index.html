@@ -599,43 +599,7 @@ const countdown = setInterval(function () {
         navigator.clipboard.writeText(shareLinkInput.value).then(() => {
           alert('लिंक कॉपी हो गया! अब शेयर करें 🎊');
         }).catch(() => {
-      // WhatsApp Share
-function shareWhatsApp(){
-    if(!window.generatedLink){
-        alert("पहले अपना लिंक बनाएं");
-        return;
-    }
-
-    const text =
-    "🎨 Happy Holi 🎨\nदेखें आपका खास होली संदेश 👇\n" +
-    window.generatedLink;
-
-    window.open("https://wa.me/?text=" + encodeURIComponent(text),"_blank");
-}
-
-// Copy Link
-function copyLink(){
-    if(!window.generatedLink){
-        alert("पहले अपना लिंक बनाएं");
-        return;
-    }
-
-    navigator.clipboard.writeText(window.generatedLink);
-    alert("लिंक कॉपी हो गया ✅");
-}
-
-// Confetti on load
-function burstConfetti(){
-    confetti({
-        particleCount:150,
-        spread:90,
-        origin:{ y:0.6 }
-    });
-}
-
-window.onload = function(){
-    setTimeout(burstConfetti, 1000);
-}
+      alert('कॉपी करने में दिक्कत, मैन्युअल कॉपी करें');
         });
       });
     
