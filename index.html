@@ -296,30 +296,7 @@
     display: block;
     animation: colorChange 3s infinite linear;
 }
-/* Floating Social Container */
-.floating-social {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    z-index: 999;
-}
 
-/* Button Style */
-.social-btn img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: 0.3s;
-}
-
-/* Hover Effect */
-.social-btn img:hover {
-    transform: scale(1.1);
-}
   </style>
 </head>
 <body>
@@ -476,6 +453,7 @@ const countdown = setInterval(function () {
     <div class="name-box">
      <input type="text" id="nameInput" placeholder="अपना नाम लिखें">
 <button id="generateBtn"><i class="fas fa-link"></i> 🎁 अपना होली लिंक बनाएं </button>
+      <button onclick="copyLink()">🔗 लिंक कॉपी करें</button>
 
       
       <!-- hidden link container (appears after generate) -->
@@ -596,6 +574,19 @@ const countdown = setInterval(function () {
           alert('कृपया अपना नाम लिखें ❤️');
           return;
         }
+        // WhatsApp Share
+function shareWhatsApp(){
+    if(!window.generatedLink){
+        alert("पहले अपना लिंक बनाएं");
+        return;
+    }
+
+    const text =
+    "🎨 Happy Holi 🎨\nदेखें आपका खास होली संदेश 👇\n" +
+    window.generatedLink;
+
+    window.open("https://wa.me/?text=" + encodeURIComponent(text),"_blank");
+}
 
         // create new URL with ?name=...
         const newUrl = new URL(window.location.href);
@@ -621,28 +612,7 @@ const countdown = setInterval(function () {
           alert('कॉपी करने में दिक्कत, मैन्युअल कॉपी करें');
         });
       });
-      <!-- Floating Social Icons -->
-<div class="floating-social">
-
-    <!-- WhatsApp -->
-    <a href="#" onclick="shareWhatsApp()" class="social-btn whatsapp">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-    </a>
-
-    <!-- Instagram -->
-    <a href="https://www.instagram.com/" target="_blank" class="social-btn instagram">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
-    </a>
-
-</div>
-
-<script>
-function shareWhatsApp() {
-    const message = "🌈✨ Check this Holi Countdown Page 🎉\n\n" + window.location.href;
-    const url = "https://wa.me/?text=" + encodeURIComponent(message);
-    window.open(url, "_blank");
-}
-</script>
+    
 
       // if URL already has name, we can prefill input? Not necessary, but we keep input empty
       // though if user wants to generate another link, they type new name.
