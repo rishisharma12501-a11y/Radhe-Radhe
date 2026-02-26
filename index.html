@@ -462,7 +462,6 @@ const countdown = setInterval(function () {
       <div id="linkContainer" class="link-container hidden">
         <input type="text" id="shareLink" readonly value="">
         <button id="copyBtn"><i class="far fa-copy"></i> कॉपी</button>
-          <button onclick="shareWhatsApp()">📲 WhatsApp पर शेयर करें</button>
       </div>
     </div>
 <div class="center-ad">    
@@ -577,19 +576,7 @@ const countdown = setInterval(function () {
           alert('कृपया अपना नाम लिखें ❤️');
           return;
         }
-        // WhatsApp Share
-function shareWhatsApp(){
-    if(!window.generatedLink){
-        alert("पहले अपना लिंक बनाएं");
-        return;
-    }
-
-    const text =
-    "🎨 Happy Holi 🎨\nदेखें आपका खास होली संदेश 👇\n" +
-    window.generatedLink;
-
-    window.open("https://wa.me/?text=" + encodeURIComponent(text),"_blank");
-}
+       
 
         // create new URL with ?name=...
         const newUrl = new URL(window.location.href);
@@ -612,7 +599,43 @@ function shareWhatsApp(){
         navigator.clipboard.writeText(shareLinkInput.value).then(() => {
           alert('लिंक कॉपी हो गया! अब शेयर करें 🎊');
         }).catch(() => {
-          alert('कॉपी करने में दिक्कत, मैन्युअल कॉपी करें');
+      // WhatsApp Share
+function shareWhatsApp(){
+    if(!window.generatedLink){
+        alert("पहले अपना लिंक बनाएं");
+        return;
+    }
+
+    const text =
+    "🎨 Happy Holi 🎨\nदेखें आपका खास होली संदेश 👇\n" +
+    window.generatedLink;
+
+    window.open("https://wa.me/?text=" + encodeURIComponent(text),"_blank");
+}
+
+// Copy Link
+function copyLink(){
+    if(!window.generatedLink){
+        alert("पहले अपना लिंक बनाएं");
+        return;
+    }
+
+    navigator.clipboard.writeText(window.generatedLink);
+    alert("लिंक कॉपी हो गया ✅");
+}
+
+// Confetti on load
+function burstConfetti(){
+    confetti({
+        particleCount:150,
+        spread:90,
+        origin:{ y:0.6 }
+    });
+}
+
+window.onload = function(){
+    setTimeout(burstConfetti, 1000);
+}
         });
       });
     
