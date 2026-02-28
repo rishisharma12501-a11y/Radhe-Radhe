@@ -519,6 +519,11 @@ giftBox.addEventListener("click", () => {
   });
 });
 
+    nameInput.addEventListener("input", () => {
+  const name = nameInput.value.trim();
+  senderNameSpan.textContent = name || "___";
+});
+
 /* 🔗 Generate Link */
 generateBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
@@ -534,6 +539,7 @@ generateBtn.addEventListener("click", () => {
 
   linkContainer.classList.remove("hidden");
 });
+  
 
 /* 📋 Copy Link */
 copyBtn.addEventListener("click", () => {
