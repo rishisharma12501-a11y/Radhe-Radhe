@@ -524,29 +524,31 @@ copyBtn.addEventListener("click", () => {
   alert("लिंक कॉपी हो गया 👍");
 });
 
-window.shareWhatsApp = function () {
+window.shareWhatsApp = async function () {
 
-  let linkToShare = document.getElementById("shareLink").value || window.location.href;
+  let linkToShare =
+    document.getElementById("shareLink").value || window.location.href;
 
-  let message = "🎉 Happy Holi 🎉\n\n🌸 Holi Special Surprise 🎁\n\n" + linkToShare;
+  let message =
+    "🎉 Happy Holi 🎉\n\n🌸 Holi Special Surprise 🎁\n\n" + linkToShare;
 
-  if (navigator.share) {
-      navigator.share({
-          title: "Happy Holi",
-          text: message,
-          url: linkToShare
-      }).catch(() => {});
-  } else {
-      window.location.href = "https://wa.me/?text=" + encodeURIComponent(message);
+  // ✅ Mobile Native Share
+  if (navigator.share && /Android|iPhone/i.test(navigator.userAgent)) {
+    try {
+      await navigator.share({
+        text: message
+      });
+      return;
+    } catch (err) {
+      console.log("Share cancelled");
+    }
   }
-};
-/* 🔍 Auto read name from URL */
-window.onload = function () {
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get("name");
-  if (name) {
-    senderNameSpan.textContent = name;
-  }
+
+  // ✅ WhatsApp Direct Fallback (Most Reliable)
+  const whatsappUrl =
+    "https://wa.me/?text=" + encodeURIComponent(message);
+
+  window.location.replace(whatsappUrl);
 };
 
 </script>
