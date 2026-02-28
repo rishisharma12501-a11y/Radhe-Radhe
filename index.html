@@ -547,7 +547,16 @@ copyBtn.addEventListener("click", () => {
   document.execCommand("copy");
   alert("लिंक कॉपी हो गया 👍");
 });
-   
+   // 🔄 Read name from URL when page loads
+window.addEventListener("load", () => {
+  const params = new URLSearchParams(window.location.search);
+  const nameFromUrl = params.get("name");
+
+  if (nameFromUrl) {
+    senderNameSpan.textContent = nameFromUrl;
+    nameInput.value = nameFromUrl;
+  }
+});
 /* 🔄 Check URL for Name (IMPORTANT FIX) */
 window.addEventListener("load", () => {
   const params = new URLSearchParams(window.location.search);
