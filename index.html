@@ -464,7 +464,7 @@ const countdown = setInterval(function () {
         <button id="copyBtn"><i class="far fa-copy"></i> कॉपी</button>
       </div>
     </div>
-<!--div class="center-ad">    
+<div class="center-ad">    
   <script>
   atOptions = {
     'key' : '992722dd633b8591e27ebdecdce06bf4',
@@ -476,7 +476,7 @@ const countdown = setInterval(function () {
 
 </script>
 <script src="https://www.highperformanceformat.com/992722dd633b8591e27ebdecdce06bf4/invoke.js"></script>
-  </div--!>
+  </div>
    <!-- MUSIC SYSTEM : गाने वाला Spotify playlist (famous Holi + Radha-Krishna) -->
     <div class="music-section">
       <h3>🎶 धमाकेदार होली गाने 🎶</h3>
@@ -536,17 +536,19 @@ copyBtn.addEventListener("click", () => {
   alert("लिंक कॉपी हो गया 👍");
 });
 
-/* 📲 WhatsApp Share */
+
+
 window.shareWhatsApp = function () {
 
-  let linkToShare = shareLinkInput.value || window.location.href;
+  let linkToShare = document.getElementById("shareLink").value || window.location.href;
 
   let message = "🎉 Happy Holi 🎉\n\n🌸 Holi Special Surprise 🎁\n\n" + linkToShare;
 
   let whatsappUrl =
-    "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
+    "https://wa.me/?text=" + encodeURIComponent(message);
 
-  window.open(whatsappUrl, "_blank");
+  // Direct redirect (mobile safe)
+  window.location.href = whatsappUrl;
 };
 
 /* 🔍 Auto read name from URL */
