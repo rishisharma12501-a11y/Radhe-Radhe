@@ -536,21 +536,22 @@ copyBtn.addEventListener("click", () => {
   alert("लिंक कॉपी हो गया 👍");
 });
 
-
-
 window.shareWhatsApp = function () {
 
   let linkToShare = document.getElementById("shareLink").value || window.location.href;
 
   let message = "🎉 Happy Holi 🎉\n\n🌸 Holi Special Surprise 🎁\n\n" + linkToShare;
 
-  let whatsappUrl =
-    "https://wa.me/?text=" + encodeURIComponent(message);
-
-  // Direct redirect (mobile safe)
-  window.location.href = whatsappUrl;
+  if (navigator.share) {
+      navigator.share({
+          title: "Happy Holi",
+          text: message,
+          url: linkToShare
+      }).catch(() => {});
+  } else {
+      window.location.href = "https://wa.me/?text=" + encodeURIComponent(message);
+  }
 };
-
 /* 🔍 Auto read name from URL */
 window.onload = function () {
   const params = new URLSearchParams(window.location.search);
