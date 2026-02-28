@@ -488,167 +488,89 @@ const countdown = setInterval(function () {
   </div>
  
   <script>
-    (function() {
-      // --- GET URL PARAMETER ---
-      const urlParams = new URLSearchParams(window.location.search);
-      let senderName = urlParams.get('name') || '';
+(function() {
 
-      // DOM elements
-      const giftBox = document.getElementById('giftBox');
-      const mainContent = document.getElementById('mainContent');
-      const shayariSpan = document.getElementById('senderNameSpan');
-      const nameInput = document.getElementById('nameInput');
-      const generateBtn = document.getElementById('generateBtn');
-      const linkContainer = document.getElementById('linkContainer');
-      const shareLinkInput = document.getElementById('shareLink');
-      const copyBtn = document.getElementById('copyBtn');
-      const floatingColorsDiv = document.getElementById('floatingColors');
-      const floatingSweetsDiv = document.getElementById('floatingSweets');
-    
-async function shareWhatsApp() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let senderName = urlParams.get('name') || '';
 
-    let linkInput = document.getElementById("shareLink").value;
-    let nameInput = document.getElementById("nameInput").value.trim();
+  const giftBox = document.getElementById('giftBox');
+  const mainContent = document.getElementById('mainContent');
+  const shayariSpan = document.getElementById('senderNameSpan');
+  const nameInput = document.getElementById('nameInput');
+  const generateBtn = document.getElementById('generateBtn');
+  const linkContainer = document.getElementById('linkContainer');
+  const shareLinkInput = document.getElementById('shareLink');
+  const copyBtn = document.getElementById('copyBtn');
 
-    if (!nameInput) {
-        alert("पहले अपना नाम लिखकर लिंक बनाएं ❤️");
-        return;
+  if (senderName) {
+    shayariSpan.innerText = senderName;
+  } else {
+    shayariSpan.innerText = 'हम सब';
+  }
+
+  giftBox.addEventListener('click', function() {
+    giftBox.style.opacity = '0';
+    setTimeout(() => {
+      giftBox.classList.add('hidden');
+      mainContent.classList.remove('hidden');
+    }, 300);
+  });
+
+  generateBtn.addEventListener('click', function() {
+    let typedName = nameInput.value.trim();
+    if (typedName === '') {
+      alert('कृपया अपना नाम लिखें ❤️');
+      return;
     }
 
-    if (!linkInput) {
-        alert("पहले लिंक जनरेट करें 🎁");
-        return;
-    }
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('name', typedName);
+    const shareable = newUrl.toString();
 
+    linkContainer.classList.remove('hidden');
+    shareLinkInput.value = shareable;
+    shayariSpan.innerText = typedName;
+  });
+
+  copyBtn.addEventListener('click', function() {
+    navigator.clipboard.writeText(shareLinkInput.value).then(() => {
+      alert('लिंक कॉपी हो गया! 🎊');
+    }).catch(() => {
+      alert('कॉपी करने में दिक्कत');
+    });
+  });
+
+  // 🔥 WHATSAPP SHARE FUNCTION (WORKING VERSION)
+  window.shareWhatsApp = async function() {
+
+    let linkToShare = shareLinkInput.value || window.location.href;
+
+    const shareData = {
+      title: "🎉 Happy Holi 🎉",
+      text: "🌸 Holi Special Surprise 🎁 देखिए और आगे शेयर कीजिए!",
+      url: linkToShare
+    };
+
+    // If Web Share API supported
     if (navigator.share) {
-        try {
-            await navigator.share({
-                title: "🎉 होली की शुभकामनाएं 🎉",
-                text: "🌸 " + nameInput + " की तरफ से होली की हार्दिक शुभकामनाएं! 🌸\n\nदेखें और अपना गिफ्ट खोलें 👇",
-                url: linkInput
-            });
-        } catch (error) {
-            console.log("Share cancelled");
-        }
-    } else {
-        alert("यह डिवाइस Web Share सपोर्ट नहीं करता");
-    }
-}
-
-      // --- set sender name in shayari if URL has name ---
-      if (senderName) {
-        shayariSpan.innerText = senderName;
-      } else {
-        shayariSpan.innerText = 'हम सब';
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log("Share cancelled");
       }
+    } 
+    else {
+      // Fallback for desktop
+      const whatsappUrl =
+        "https://wa.me/?text=" +
+        encodeURIComponent(shareData.text + " " + linkToShare);
 
-      // --- GIFT BOX CLICK : boom, colors, music, sab kuch ---
-      giftBox.addEventListener('click', function() {
-        // hide gift box, show main content
-        giftBox.style.opacity = '0';
-        setTimeout(() => {
-          giftBox.classList.add('hidden');
-          mainContent.classList.remove('hidden');
-        }, 300);
+      window.open(whatsappUrl, "_blank");
+    }
+  };
 
-        // BOOM : confetti + gulal + sweets flying
-        for (let i=0; i<6; i++) {
-          setTimeout(() => {
-            confetti({ particleCount: 80, spread: 100, origin: { y: 0.6 }, colors: ['#ff4d4d', '#ffae42', '#ffea61', '#4caf50', '#3f7fbf'] });
-          }, i*100);
-        }
-
-        // create 30 floating colors (gulal ke katre)
-        for (let i=0; i<30; i++) {
-          let span = document.createElement('span');
-          let size = Math.floor(Math.random() * 30 + 15);
-          span.style.width = size + 'px';
-          span.style.height = size + 'px';
-          span.style.background = `radial-gradient(circle, hsl(${Math.random()*360}, 80%, 70%), hsl(${Math.random()*360}, 90%, 60%))`;
-          span.style.left = Math.random() * 100 + '%';
-          span.style.bottom = '-10px';
-          span.style.animationDelay = Math.random() * 3 + 's';
-          span.style.animationDuration = Math.floor(Math.random() * 5 + 4) + 's';
-          span.style.borderRadius = '50% 20% 50% 30%';
-          floatingColorsDiv.appendChild(span);
-        }
-
-        // add mithai (gujiya, gulab jamun, rasgulla emoji) flying
-        const sweets = ['🍬', '🍭', '🍡', '🥮', '🍩', '🍪', '🧁', '🍰', '🍫', '🍬', '🍬', '🍡', '🍩', '🥟']; // gujiya, jamun, rasgulla vibe
-        for (let i=0; i<20; i++) {
-          let span = document.createElement('span');
-          span.innerHTML = sweets[Math.floor(Math.random() * sweets.length)];
-          span.style.left = Math.random() * 100 + '%';
-          span.style.bottom = '-20px';
-          span.style.fontSize = (Math.floor(Math.random() * 30) + 25) + 'px';
-          span.style.animationDelay = Math.random() * 4 + 's';
-          span.style.animationDuration = (Math.random() * 6 + 5) + 's';
-          floatingSweetsDiv.appendChild(span);
-        }
-
-        // thoda aur maza: floating 'gulal' text
-        for (let i=0; i<15; i++) {
-          let span = document.createElement('span');
-          span.innerHTML = '🎉';
-          span.style.left = Math.random() * 100 + '%';
-          span.style.bottom = '0px';
-          span.style.fontSize = '30px';
-          span.style.animationDelay = Math.random() * 5 + 's';
-          span.style.animationDuration = (Math.random() * 6 + 5) + 's';
-          floatingSweetsDiv.appendChild(span);
-        }
-      });
-
-      // --- GENERATE SHAREABLE LINK WITH NAME ---
-      generateBtn.addEventListener('click', function() {
-        let typedName = nameInput.value.trim();
-        if (typedName === '') {
-          alert('कृपया अपना नाम लिखें ❤️');
-          return;
-        }
-       
-
-        // create new URL with ?name=...
-        const newUrl = new URL(window.location.href);
-        newUrl.searchParams.set('name', encodeURIComponent(typedName));
-        // remove possible old hash etc, keep clean
-        const shareable = newUrl.toString();
-
-        // show link container and set value
-        linkContainer.classList.remove('hidden');
-        shareLinkInput.value = shareable;
-
-        // update shayari? we could but this is for receiver's view; current window still shows old name maybe.
-        // but to be consistent, we change the shayari in current tab as if we are sender (optional)
-        shayariSpan.innerText = typedName;
-      });
-
-      // --- COPY LINK TO CLIPBOARD ---
-      copyBtn.addEventListener('click', function() {
-        shareLinkInput.select();
-        navigator.clipboard.writeText(shareLinkInput.value).then(() => {
-          alert('लिंक कॉपी हो गया! अब शेयर करें 🎊');
-        }).catch(() => {
-      alert('कॉपी करने में दिक्कत, मैन्युअल कॉपी करें');
-        });
-      });
-    
-
-      // if URL already has name, we can prefill input? Not necessary, but we keep input empty
-      // though if user wants to generate another link, they type new name.
-      // Optionally we can show link for existing name? we don't auto-generate, user will click button.
-
-      // Also if URL has name, we set shayari already did above, but also set a small gift? fine.
-
-      // On page load, ensure gift box is there if no direct jump? Already fine.
-
-      // Also prevent gift box from being hidden if main content accidentally shown
-      // good.
-
-      // extra: if someone opens link with name, gift box still appears first. perfect.
-    })();
-  </script>
-
+})();
+</script>
   <!-- add a few more static gulal elements for richness (already done via JS but extra) -->
   <noscript>JavaScript enable karein</noscript>
   <!-- 
