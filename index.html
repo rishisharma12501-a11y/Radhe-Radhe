@@ -487,89 +487,77 @@ const countdown = setInterval(function () {
     </div>
   </div>
  
-  <script>
-(function() {
+ <script>
 
-  const urlParams = new URLSearchParams(window.location.search);
-  let senderName = urlParams.get('name') || '';
+const giftBox = document.getElementById("giftBox");
+const mainContent = document.getElementById("mainContent");
+const generateBtn = document.getElementById("generateBtn");
+const nameInput = document.getElementById("nameInput");
+const senderNameSpan = document.getElementById("senderNameSpan");
+const linkContainer = document.getElementById("linkContainer");
+const shareLinkInput = document.getElementById("shareLink");
+const copyBtn = document.getElementById("copyBtn");
 
-  const giftBox = document.getElementById('giftBox');
-  const mainContent = document.getElementById('mainContent');
-  const shayariSpan = document.getElementById('senderNameSpan');
-  const nameInput = document.getElementById('nameInput');
-  const generateBtn = document.getElementById('generateBtn');
-  const linkContainer = document.getElementById('linkContainer');
-  const shareLinkInput = document.getElementById('shareLink');
-  const copyBtn = document.getElementById('copyBtn');
+/* 🎁 Gift Box Click */
+giftBox.addEventListener("click", () => {
+  giftBox.style.opacity = "0";
+  setTimeout(() => {
+    giftBox.style.display = "none";
+    mainContent.classList.remove("hidden");
+  }, 500);
 
-  if (senderName) {
-    shayariSpan.innerText = senderName;
-  } else {
-    shayariSpan.innerText = 'हम सब';
+  confetti({
+    particleCount: 200,
+    spread: 120,
+    origin: { y: 0.6 }
+  });
+});
+
+/* 🔗 Generate Link */
+generateBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (!name) {
+    alert("पहले अपना नाम लिखें 😊");
+    return;
   }
 
-  giftBox.addEventListener('click', function() {
-    giftBox.style.opacity = '0';
-    setTimeout(() => {
-      giftBox.classList.add('hidden');
-      mainContent.classList.remove('hidden');
-    }, 300);
-  });
+  senderNameSpan.textContent = name;
 
-  generateBtn.addEventListener('click', function() {
-    let typedName = nameInput.value.trim();
-    if (typedName === '') {
-      alert('कृपया अपना नाम लिखें ❤️');
-      return;
-    }
+  const url = window.location.origin + window.location.pathname + "?name=" + encodeURIComponent(name);
+  shareLinkInput.value = url;
 
-    const newUrl = new URL(window.location.href);
-    newUrl.searchParams.set('name', typedName);
-    const shareable = newUrl.toString();
+  linkContainer.classList.remove("hidden");
+});
 
-    linkContainer.classList.remove('hidden');
-    shareLinkInput.value = shareable;
-    shayariSpan.innerText = typedName;
-  });
+/* 📋 Copy Link */
+copyBtn.addEventListener("click", () => {
+  shareLinkInput.select();
+  document.execCommand("copy");
+  alert("लिंक कॉपी हो गया 👍");
+});
 
-  copyBtn.addEventListener('click', function() {
-    navigator.clipboard.writeText(shareLinkInput.value).then(() => {
-      alert('लिंक कॉपी हो गया! 🎊');
-    }).catch(() => {
-      alert('कॉपी करने में दिक्कत');
-    });
-  });
+/* 📲 WhatsApp Share */
+window.shareWhatsApp = function () {
 
-  // 🔥 WHATSAPP SHARE FUNCTION (WORKING VERSION)
-  window.shareWhatsApp = async function() {
+  let linkToShare = shareLinkInput.value || window.location.href;
 
-    let linkToShare = shareLinkInput.value || window.location.href;
+  let message = "🎉 Happy Holi 🎉\n\n🌸 Holi Special Surprise 🎁\n\n" + linkToShare;
 
-    const shareData = {
-      title: "🎉 Happy Holi 🎉",
-      text: "🌸 Holi Special Surprise 🎁 देखिए और आगे शेयर कीजिए!",
-      url: linkToShare
-    };
+  let whatsappUrl =
+    "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
 
-    // If Web Share API supported
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (err) {
-        console.log("Share cancelled");
-      }
-    } 
-    else {
-      // Fallback for desktop
-      const whatsappUrl =
-        "https://wa.me/?text=" +
-        encodeURIComponent(shareData.text + " " + linkToShare);
+  window.open(whatsappUrl, "_blank");
+};
 
-      window.open(whatsappUrl, "_blank");
-    }
-  };
+/* 🔍 Auto read name from URL */
+window.onload = function () {
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get("name");
+  if (name) {
+    senderNameSpan.textContent = name;
+  }
+};
 
-})();
 </script>
   <!-- add a few more static gulal elements for richness (already done via JS but extra) -->
   <noscript>JavaScript enable karein</noscript>
