@@ -524,31 +524,6 @@ copyBtn.addEventListener("click", () => {
   alert("लिंक कॉपी हो गया 👍");
 });
 
-function shareWhatsApp() {
-
-  let linkToShare =
-    document.getElementById("shareLink").value || window.location.href;
-
-  let message =
-    "🎉 Happy Holi 🎉\n\n🌸 Holi Special Surprise 🎁\n\n" + linkToShare;
-
-  let encodedMessage = encodeURIComponent(message);
-
-  // ✅ Android App Direct Open
-  if (/Android/i.test(navigator.userAgent)) {
-    window.location.href = "whatsapp://send?text=" + encodedMessage;
-    return;
-  }
-
-  // ✅ iPhone App Direct Open
-  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    window.location.href = "https://api.whatsapp.com/send?text=" + encodedMessage;
-    return;
-  }
-
-  // ✅ Desktop fallback
-  window.location.href = "https://web.whatsapp.com/send?text=" + encodedMessage;
-}
 
 
 </script>
