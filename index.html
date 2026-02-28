@@ -454,11 +454,13 @@ const countdown = setInterval(function () {
     <div class="name-box">
      <input type="text" id="nameInput" placeholder="अपना नाम लिखें">
 <button id="generateBtn"><i class="fas fa-link"></i> 🎁 अपना होली लिंक बनाएं </button>
+  <button id="whatsappShare">📲 WhatsApp par Share kare</button>   
   <a href="https://api.whatsapp.com/send?text=🎉 Happy Holi 🎉%20https%3A%2F%2Frishisharma12501-a11y.github.io%2FRadhe-Radhe%2F"
    target="_blank"
    style="background:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">
    📲 Share on WhatsApp
 </a>
+    
       
   <div class="center-ad">    
 <script>
@@ -546,6 +548,25 @@ copyBtn.addEventListener("click", () => {
   shareLinkInput.select();
   document.execCommand("copy");
   alert("लिंक कॉपी हो गया 👍");
+});
+
+  const whatsappBtn = document.getElementById("whatsappShare");
+
+whatsappBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+
+  if (!name) {
+    alert("पहले अपना नाम लिखें 😊");
+    return;
+  }
+
+  const url = window.location.origin + window.location.pathname + "?name=" + encodeURIComponent(name);
+
+  const message = `🎉 Happy Holi 🎉\nदेखो किसने आपको विश किया 👇\n${url}`;
+
+  const whatsappUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
+
+  window.open(whatsappUrl, "_blank");
 });
    // 🔄 Read name from URL when page loads
 window.addEventListener("load", () => {
