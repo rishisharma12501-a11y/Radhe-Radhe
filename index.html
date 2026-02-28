@@ -541,7 +541,18 @@ copyBtn.addEventListener("click", () => {
   document.execCommand("copy");
   alert("लिंक कॉपी हो गया 👍");
 });
+   
+/* 🔄 Check URL for Name (IMPORTANT FIX) */
+window.addEventListener("load", () => {
+  const params = new URLSearchParams(window.location.search);
+  const nameFromURL = params.get("name");
 
+  if (nameFromURL) {
+    senderNameSpan.textContent = decodeURIComponent(nameFromURL);
+    mainContent.classList.remove("hidden");
+    giftBox.style.display = "none";
+  }
+});
 
 
 </script>
